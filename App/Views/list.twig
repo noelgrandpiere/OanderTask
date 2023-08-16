@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Termékek Listázása</title>
+</head>
+<body>
+    <h1>Termékek Listázása</h1>
+    <!-- Szűrő űrlap -->
+    <form method="GET">
+        <input type="text" name="brand" placeholder="Márka" value="{{ filters.brand }}">
+        <input type="text" name="resolution" placeholder="Felbontás" value="{{ filters.resolution }}">
+        <input type="number" name="minPrice" placeholder="Min ár" value="{{ filters.minPrice }}">
+        <input type="number" name="maxPrice" placeholder="Max ár" value="{{ filters.maxPrice }}">
+        <select name="screenSize">
+            <option value="">-- Válassz méretet --</option>
+            <option value="24" {{ filters.screenSize == '24' ? 'selected' : '' }}>24 inch</option>
+            <option value="27" {{ filters.screenSize == '27' ? 'selected' : '' }}>27 inch</option>
+            <option value="32" {{ filters.screenSize == '32' ? 'selected' : '' }}>32 inch</option>
+        </select>
+        
+        <button type="submit">Szűrés</button>
+        <a href="?reset=true">Alaphelyzet</a>
+    </form>
+
+    <ul>
+        {% for product in products %}
+            <li>
+                <strong>{{ product.brand }} - {{ product.name }} /{{ product.screen_size }}/{{ product.resolution }}  ({{ product.base_price}} Ft)</strong><br>
+                Leírás: {{ product.description }}<br>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if products|length > 0 %}
+        <div>
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}{% if filters.brand is defined %}&brand={{ filters.brand }}{% endif %}{% if filters.resolution is defined %}&resolution={{ filters.resolution }}{% endif %}{% if filters.maxPrice is defined %}&maxPrice={{ filters.maxPrice }}{% endif %}">Előző</a>
+            {% endif %}
+
+            {% for i in 1..totalPages %}
+                <a href="?page={{ i }}{% if filters.brand is defined %}&brand={{ filters.brand }}{% endif %}{% if filters.resolution is defined %}&resolution={{ filters.resolution }}{% endif %}{% if filters.maxPrice is defined %}&maxPrice={{ filters.maxPrice }}{% endif %}">{{ i }}</a>
+            {% endfor %}
+
+            {% if page < totalPages %}
+                <a href="?page={{ page + 1 }}{% if filters.brand is defined %}&brand={{ filters.brand }}{% endif %}{% if filters.resolution is defined %}&resolution={{ filters.resolution }}{% endif %}{% if filters.maxPrice is defined %}&maxPrice={{ filters.maxPrice }}{% endif %}">Következő</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</body>
+</html>

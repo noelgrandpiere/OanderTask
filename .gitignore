@@ -1,0 +1,5 @@
+/vendor/
+!.gitignore
+!composer.json
+!Dockerfile
+!vhost.conf
